@@ -10,5 +10,8 @@
   },
   "scripts": {
     "dev": "gatsby develop"
+  },
+  "devDependencies": {
+    "prettier": "^2.0.5"
   }
 }
