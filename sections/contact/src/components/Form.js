@@ -12,15 +12,11 @@ const INITIAL_STATE = {
 const reducer = (state, action) => {
   switch (action.type) {
     case 'updateFieldValue':
-      return {
-        ...state,
-        [action.field]: action.value,
-      }
+      return {...state, [action.field]: action.value}
+
     case 'updateStatus':
-      return {
-        ...state,
-        status: action.status,
-      }
+      return {...state, status: action.status}
+
     case 'reset':
     default:
       return INITIAL_STATE
@@ -30,30 +26,24 @@ const reducer = (state, action) => {
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
 
-  const updateFieldValue = (field) => (event) => {
+  const setStatus = (status) => dispatch({type: 'updateStatus', status})
+
+  const updateFieldValue = (field) => (event) =>
     dispatch({
       type: 'updateFieldValue',
-      field,
       value: event.target.value,
+      field,
     })
-  }
 
-  const setStatus = (status) => {
-    dispatch({
-      type: 'updateStatus',
-      status,
-    })
-  }
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault()
     setStatus('PENDING')
 
-    await fetch('/api/contact', {
+    fetch('/api/contact', {
       method: 'POST',
       body: JSON.stringify(state),
     })
-      .then((res) => JSON.stringify(res))
+      .then((response) => response.json())
       .then((response) => {
         console.log(response)
         setStatus('SUCCESS')
@@ -69,9 +59,9 @@ const Form = () => {
       <p className={styles.success}>
         Message sent!
         <button
-          className={`${styles.button} ${styles.centered}`}
           type="reset"
-          onClick={() => dispatch({type: 'reset'})}>
+          onClick={() => dispatch({type: 'reset'})}
+          className={`${styles.button} ${styles.centered}`}>
           Reset
         </button>
       </p>
@@ -81,52 +71,48 @@ const Form = () => {
   return (
     <>
       {state.status === 'ERROR' && (
-        <p className={styles.success}>
-          {' '}
-          Something went wrong please, tray again!
-        </p>
+        <p className={styles.error}>Something went wrong. Please try again.</p>
       )}
-
       <form
         className={`${styles.form} ${
           state.status === 'PENDING' && styles.pending
         }`}
         onSubmit={handleSubmit}>
-        <label htmlFor="name" className={styles.label}>
+        <label className={styles.label}>
           Name
           <input
+            className={styles.input}
             type="text"
             name="name"
-            className={styles.input}
             value={state.name}
             onChange={updateFieldValue('name')}
           />
         </label>
-        <label htmlFor="email" className={styles.label}>
+        <label className={styles.label}>
           Email
           <input
+            className={styles.input}
             type="email"
             name="email"
-            className={styles.input}
             value={state.email}
             onChange={updateFieldValue('email')}
           />
         </label>
-        <label htmlFor="subject" className={styles.label}>
+        <label className={styles.label}>
           Subject
           <input
+            className={styles.input}
             type="text"
             name="subject"
-            className={styles.input}
             value={state.subject}
             onChange={updateFieldValue('subject')}
           />
         </label>
-        <label htmlFor="body" className={styles.label}>
+        <label className={styles.label}>
           Body
           <textarea
-            name="body"
             className={styles.input}
+            name="body"
             value={state.body}
             onChange={updateFieldValue('body')}
           />

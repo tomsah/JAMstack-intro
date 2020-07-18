@@ -1,18 +1,26 @@
-/**
- *
- * @param event
- * @param _context
- * @param callback
- */
+require('dotenv').config()
+
 exports.handler = (event, _context, callback) => {
-  console.log({event})
-  /**
-   * callback definition
-   * @Arg1 error set to null, when nothing goes wrong
-   * @Arg2 success object
-   */
-  callback(null, {
-    statusCode: 200,
-    body: JSON.stringify({foo: true}),
+  const mailgun = require('mailgun-js')
+  const mg = mailgun({
+    apiKey: process.env.MAILGUN_API_KEY,
+    domain: process.env.MAILGUN_DOMAIN,
+  })
+
+  const data = JSON.parse(event.body)
+  console.log('data>>>>>>>>>>', data)
+  const email = {
+    from: 'Thomas salah <thomas.salah@gmail.com>',
+    to: `${data.name} <${data.email}>`,
+    subject: data.subject,
+    text: data.body,
+  }
+
+  mg.messages().send(email, (error, response) => {
+    console.log(response)
+    callback(error, {
+      statusCode: 200,
+      body: JSON.stringify(response),
+    })
   })
 }
