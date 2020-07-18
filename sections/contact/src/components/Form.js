@@ -38,19 +38,30 @@ const Form = () => {
     })
   }
 
-  const updateStatus = (status) => {
+  const setStatus = (status) => {
     dispatch({
       type: 'updateStatus',
       status,
     })
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    updateStatus('PENDING')
-    console.log(state)
+    setStatus('PENDING')
 
-    setTimeout(() => updateStatus('SUCCESS'), 100)
+    await fetch('/api/contact', {
+      method: 'POST',
+      body: JSON.stringify(state),
+    })
+      .then((res) => JSON.stringify(res))
+      .then((response) => {
+        console.log(response)
+        setStatus('SUCCESS')
+      })
+      .catch((error) => {
+        console.error(error)
+        setStatus('ERROR')
+      })
   }
 
   if (state.status === 'SUCCESS') {
