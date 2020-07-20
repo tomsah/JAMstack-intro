@@ -1,0 +1,34 @@
+import React, {useState} from 'react'
+import axios from 'axios'
+import styles from './form.module.css'
+
+const Form = () => {
+  const [text, setText] = useState('')
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (text === '') return
+
+    await axios.post('/api/create-todo', {text})
+
+    setText('')
+  }
+
+  return (
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <label htmlFor="todo" className={styles.label}>
+        Add a Todo
+        <input
+          type="text"
+          name="todo"
+          className={styles.input}
+          value={text}
+          onChange={(event) => setText(event.target.value)}
+        />
+      </label>
+      <button className={styles.button}> Add todo</button>
+    </form>
+  )
+}
+
+export default Form
