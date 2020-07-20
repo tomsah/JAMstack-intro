@@ -13,9 +13,7 @@ const GET_ALL_TODOS = `
 `
 
 exports.handler = async () => {
-  const {data, errors} = sendQuery(GET_ALL_TODOS)
-
-  console.log('data >>>>>>>>>', data)
+  const {data, errors} = await sendQuery(GET_ALL_TODOS)
 
   if (errors) {
     return {

@@ -13,6 +13,7 @@ module.exports = async (query, variables = {}) => {
       variables,
     },
   })
+  console.log('result !!!!!!!!!!!!!!', result.data)
 
   return result.data
 }
