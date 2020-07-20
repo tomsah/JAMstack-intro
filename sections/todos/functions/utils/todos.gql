@@ -1,5 +1,5 @@
 type Todo {
-    text: String!,
+    text: String!
     completed: Boolean
 }
 
