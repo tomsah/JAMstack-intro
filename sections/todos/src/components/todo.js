@@ -13,6 +13,14 @@ const Todo = ({todo, reloadTodos}) => {
       .then(reloadTodos)
   }
 
+  const handelDelete = () => {
+    axios
+      .post('/api/delete-todo', {
+        id: todo._id,
+      })
+      .then(reloadTodos)
+  }
+
   return (
     <>
       <label htmlFor={`toggle-todo-${todo.id}`} className={styles.label}>
@@ -28,6 +36,14 @@ const Todo = ({todo, reloadTodos}) => {
       <p className={`${styles.text} ${todo.completed && styles.completed}`}>
         {todo.text}
       </p>
+      <label htmlFor={`delete-todo-${todo.id}`} className={styles.label}>
+        Delete
+      </label>
+      <button onClick={handelDelete} className={styles.delete}>
+        <span role="img" title="delete this todo" aria-label="delete">
+          ❌
+        </span>
+      </button>
     </>
   )
 }
