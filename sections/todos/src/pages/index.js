@@ -31,16 +31,18 @@ export default () => {
     }
   }, [status])
 
+  const reloadTodos = () => setStatus('loading')
+
   return (
     <div>
       <h1 className={styles.heading}>JAMstack TODOS </h1>
       <main>
-        <Form />
+        <Form reloadTodos={reloadTodos} />
         {todos ? (
           <ul className={styles.todos}>
             {todos.map((todo) => (
               <li key={todo._id} className={styles.todo}>
-                <Todo todo={todo} />
+                <Todo todo={todo} reloadTodos={reloadTodos} />
               </li>
             ))}
           </ul>
